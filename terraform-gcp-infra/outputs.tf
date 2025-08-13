@@ -4,8 +4,7 @@ output "lb_ip_address" {
 }
 
 output "lb_url" {
-  description = "HTTPS URL for the load balancer"
-  value       = "https://${var.domain_name}"
+  value = "https://${var.lb_hosts[0]}"
 }
 
 output "frontend_service_name" {

@@ -18,7 +18,6 @@ resource "google_compute_global_address" "lb_ip" {
   name         = "central-lb-ip"
   ip_version   = "IPV4"
   address_type = "EXTERNAL"
-  network_tier = "PREMIUM"
 }
 
 ##Create an SSL certificate resource
