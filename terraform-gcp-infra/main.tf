@@ -5,7 +5,6 @@ data "terraform_remote_state" "frontend" {
     workspaces = { name = var.frontend_workspace }
   }
 }
-
 data "terraform_remote_state" "contact_api" {
   backend = "remote"
   config = {
