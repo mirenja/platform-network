@@ -1,0 +1,64 @@
+name: Cloud Infrastructure  Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: ${{ secrets.GCP_REGION }}
+  FRONTEND_WORKSPACE: ${{secrets.TFC_FE_WORKSPACE}}
+  CONTACT_API_WORKSPACE: ${{secrets.TFC_API_WORKSPACE}}
+  DOMAIN: ${{ secrets.DOMAIN_NAME }}
+ 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          create_credentials_file: true
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Write backend config
+        run: |
+          echo -e "organization = \"${{ secrets.TFC_ORG }}\"\nworkspaces {\n  name = \"${{ secrets.TFC_WORKSPACE }}\"\n}" > terraform-gcp-infra/backend.hcl
+
+      - name: Initialize Terraform
+        run: terraform init -input=false -backend-config=backend.hcl
+        working-directory: ./terraform-gcp-infra
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
+      
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ./terraform-gcp-infra
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="frontend_workspace=$FRONTEND_WORKSPACE" -var="contact_api_workspace=$CONTACT_API_WORKSPACE" -var="lb_hosts=[\"$DOMAIN\"]"
+        working-directory: ./terraform-gcp-infra
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="frontend_workspace=$FRONTEND_WORKSPACE" -var="contact_api_workspace=$CONTACT_API_WORKSPACE" -var="lb_hosts=[\"$DOMAIN\"]"
+        working-directory: ./terraform-gcp-infra
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}

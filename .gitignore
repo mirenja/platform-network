@@ -1,0 +1,12 @@
+
+
+gcloud.txt
+
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+prod.tfvars
+backend.hcl
+guide.txt
+
+
