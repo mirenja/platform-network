@@ -37,7 +37,7 @@ resource "google_compute_region_network_endpoint_group" "cloud_run_neg" {
   network_endpoint_type = "SERVERLESS"
 
   cloud_run {
-    service = data.terraform_remote_state.frontend.outputs.cloud_run_service_name
+    service = data.terraform_remote_state.frontend.outputs.service_name
   }
 }
 
