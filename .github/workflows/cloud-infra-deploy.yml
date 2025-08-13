@@ -10,6 +10,7 @@ env:
   REGION: ${{ secrets.GCP_REGION }}
   FRONTEND_WORKSPACE: ${{secrets.TFC_FE_WORKSPACE}}
   CONTACT_API_WORKSPACE: ${{secrets.TFC_API_WORKSPACE}}
+  TFC_ORG: ${{secrets.TFC_ORG}}
   DOMAIN: ${{ secrets.DOMAIN_NAME }}
  
 
@@ -52,13 +53,13 @@ jobs:
         working-directory: ./terraform-gcp-infra
 
       - name: Terraform Plan
-        run: terraform plan -input=false -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="frontend_workspace=$FRONTEND_WORKSPACE" -var="contact_api_workspace=$CONTACT_API_WORKSPACE" -var="lb_hosts=[\"$DOMAIN\"]"
+        run: terraform plan -input=false -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="frontend_workspace=$FRONTEND_WORKSPACE" -var="contact_api_workspace=$CONTACT_API_WORKSPACE" -var="lb_hosts=[\"$DOMAIN\"]" -var="organization=$TFC_ORG"
         working-directory: ./terraform-gcp-infra
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="frontend_workspace=$FRONTEND_WORKSPACE" -var="contact_api_workspace=$CONTACT_API_WORKSPACE" -var="lb_hosts=[\"$DOMAIN\"]"
+        run: terraform apply -auto-approve -var="project_id=$PROJECT_ID" -var="region=$REGION" -var="frontend_workspace=$FRONTEND_WORKSPACE" -var="contact_api_workspace=$CONTACT_API_WORKSPACE" -var="lb_hosts=[\"$DOMAIN\"]" -var="organization=$TFC_ORG"
         working-directory: ./terraform-gcp-infra
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}

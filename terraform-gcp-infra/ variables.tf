@@ -13,6 +13,11 @@ variable "frontend_workspace" {
   type        = string
 }
 
+variable "organization" {
+  description = "Terraform Cloud organization"
+  type        = string
+}
+
 variable "contact_api_workspace" {
   description = "Terraform Cloud workspace for backend"
   type        = string
