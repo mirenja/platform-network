@@ -145,3 +145,7 @@ resource "google_dns_record_set" "lb_dns" {
   managed_zone = google_dns_managed_zone.default_zone.name
   rrdatas      = [google_compute_global_address.lb_ip.address]
 }
+
+terraform {
+  backend "remote" {}
+}
