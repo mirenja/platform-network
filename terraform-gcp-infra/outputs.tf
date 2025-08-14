@@ -9,7 +9,7 @@ output "lb_url" {
 
 output "frontend_service_name" {
   description = "Cloud Run service name from frontend workspace"
-  value       = data.terraform_remote_state.frontend.outputs.cloud_run_service_name
+  value       = data.terraform_remote_state.frontend.outputs.service_name
 }
 
 output "backend_function_name" {
