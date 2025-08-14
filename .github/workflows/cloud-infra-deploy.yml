@@ -13,7 +13,6 @@ env:
   TFC_ORG: ${{secrets.TFC_ORG}}
   DOMAIN: ${{ secrets.DOMAIN_NAME }}
  
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
