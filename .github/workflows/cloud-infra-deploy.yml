@@ -11,7 +11,7 @@ env:
   FRONTEND_WORKSPACE: ${{secrets.TFC_FE_WORKSPACE}}
   CONTACT_API_WORKSPACE: ${{secrets.TFC_API_WORKSPACE}}
   TFC_ORG: ${{secrets.TFC_ORG}}
-  DOMAIN: ${{ secrets.DOMAIN_NAME }}
+  DOMAIN: ${{ secrets.DOMAIN }}
  
 jobs:
   deploy:
