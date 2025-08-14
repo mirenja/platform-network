@@ -104,7 +104,6 @@ resource "google_compute_target_https_proxy" "https_proxy" {
   name             = "central-https-proxy"
   url_map          = google_compute_url_map.lb_url_map.id
   ssl_certificates = [google_compute_managed_ssl_certificate.lb_cert.id]
-  http_keep_alive_timeout_sec  = 600
 }
 
 
